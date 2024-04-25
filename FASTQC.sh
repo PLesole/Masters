@@ -1,16 +1,28 @@
 #!/bin/bash
+# Shell script to analysis paired-end RNA-seq reads using FASTQC and multiqc
 
-Input_folder=~/Palesa/Masters/Green_data
-Output_folder=~/Palesa/Masters/Green_data/fastqc
+Input_dir=~/Palesa/Masters/Green_data
+Output_dir=~/Palesa/Masters/Green_data/fastqc
 
-mkdir -p "$Output_folder"
+#check if inout and output directories exist; make output directory if it does not exist
+if [[ -z $Input_folder ]]; then
+	echo -e "The input directory is missing"
+	exit -1
+fi
+
+if [[ -z $Output_dir ]]; then
+	echo -e "The output directory is missing"
+  echo -e "Making output directory now"
+  mkdir -p "$Output_dir"
+	exit -1
+fi
 
 
-for file in SRR8926873 SRR8926874 SRR8926875
+
+for file in $(ls ${Input_dir}/*.fastq.gz  | sed 's/_[12].fastq.gz$//' | uniq)
   do
-    fastq_R1="${Input_folder}/${file}_1.fastq.gz"
-    fastq_R2="${Input_folder}/${file}_2.fastq.gz"
-    fastqc $fastq_R1 $fastq_R2 --outdir $Output_folder
+
+    fastqc ${file}_1.fastq.gz ${file}_2.fastqc.gz --outdir $Output_dir
   done
 
-multiqc $Output_folder
+multiqc $Output_dir
