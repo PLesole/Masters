@@ -12,13 +12,11 @@ cd ${OD}
 #check necessary parameters
 if [[ -z $REF_GENOME_INDEX ]]; then
 	echo -e "The index file for HISAT2 is missing"
-	usage
 	exit -1
 fi
 
 if [[ -z $OD ]]; then
 	echo -e "The input directory for HISAT2 is missing"
-	usage
 	exit -1
 fi
 
@@ -27,7 +25,6 @@ for file in $(ls ${OD}/*.fastq.gz  | sed 's/_[12].fastq.gz$//' | uniq)
        # Testing if the two paired files exist
        if [[ -z ${file}_1.fastq.gz  ]] || [[ -z ${file}_2.fastq.gz ]]; then
            echo -e "Read 1 and Read 2 file cannot be detected for $file"
-           usage
            exit -1
        fi
     output_prefix=$(basename $file)
